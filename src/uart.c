@@ -167,6 +167,7 @@ void USART1_IRQHandler(void)
 
 	    if ((status1 & S1RECORD) == S1RECORD)
 	    	// panggil ring buffer di sini
+
 	    	Data++;
 
 	    USART_SendData(USARTrPi, Data);
@@ -191,5 +192,10 @@ void USARTRpiNVIC_Configuration(void)
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
+}
+
+void actuateOutput()
+{
 
 }
+
