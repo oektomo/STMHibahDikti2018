@@ -35,6 +35,7 @@
 #include "BlinkLed.h"
 #include "uart.h"
 #include "platform_config.h"
+#include "codec2_fifo.h"
 
 // ----------------------------------------------------------------------------
 //
@@ -79,8 +80,10 @@
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-uint8_t status1 = 0;
+#define LENGTHRpiRx 128
 
+volatile uint8_t status1 = 0;
+volatile struct FIFO *rxDatarPi;
 
 int
 main(int argc, char* argv[])
@@ -99,10 +102,16 @@ main(int argc, char* argv[])
   USART_InitTypeDef USART_InitStructure;
   initUART(&USART_InitStructure);
   USART_SendString(USARTrPi, "SmartHome Started v0.2 \n\r");
+  rxDatarPi = fifo_create(LENGTHRpiRx);
 
   // Infinite loop
   while (1)
     {
+//	  USART_Tx(USARTrPi, Data);
+	  if( (status1 & S1DATA) == S1DATA) {
+		  sendDataRx();
+		  status1 &= ~S1DATA;
+	  }
 
     }
   // Infinite loop, never return.

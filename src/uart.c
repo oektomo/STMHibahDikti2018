@@ -7,6 +7,7 @@
 
 #include "platform_config.h"
 #include "uart.h"
+#include "codec2_fifo.h"
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -142,6 +143,7 @@ uart_printf(const char* format, ...)
 }
 
 extern uint8_t status1;
+struct FIFO *rxDatarPi;
 /*
  * USART1_IRQ HANDLER
  */
@@ -163,14 +165,22 @@ void USART1_IRQHandler(void)
 	    } else if ( (Data == 'E') && ((status1 & S1RECORD) == S1RECORD) ) {
 	    	status1 |= S1DATA;
 	    	status1 &= ~S1RECORD;
+	    	fifo_write(rxDatarPi, &Data, 1);
 	    }
 
 	    if ((status1 & S1RECORD) == S1RECORD)
-	    	// panggil ring buffer di sini
+	    	fifo_write(rxDatarPi, &Data, 1);
 
-	    	Data++;
-
-	    USART_SendData(USARTrPi, Data);
+	    //USART_SendData(USARTrPi, fifo_used(rxDatarPi));
+	    sendDataInt(fifo_used(rxDatarPi));
+	    //sendDataInt(status1);
+	    /*
+		  if( (status1 & S1DATA) == S1DATA) {
+			  sendDataRx();
+			  status1 &= ~S1DATA;
+			  USART_Tx(USARTrPi, '\n');
+		  }
+		  */
 	  }
 
 }
@@ -198,4 +208,25 @@ void actuateOutput()
 {
 
 }
+
+void sendDataInt(int n)
+{
+	char buffer[10];
+	itoa(n, buffer, 10);
+	uint8_t i = 0;
+	while(buffer[i]!='\0') {
+		USART_Tx(USARTrPi, buffer[i]);
+		i++;
+	}
+}
+
+void sendDataRx()
+{
+	short Data;
+	while( Data != 'E') {
+		fifo_read(rxDatarPi, &Data, 1);
+		USART_Tx(USARTrPi, Data);
+	}
+}
+
 
