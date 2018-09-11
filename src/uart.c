@@ -140,6 +140,8 @@ uart_printf(const char* format, ...)
   va_end (ap);
   return ret;
 }
+
+extern uint8_t status1;
 /*
  * USART1_IRQ HANDLER
  */
@@ -158,8 +160,9 @@ void USART1_IRQHandler(void)
 	    // check status to RECORD or to tell if the status ready.
 	    if (Data == 'S') {
 	    	status1 |= S1RECORD;
-	    } else if ( (Data == 'E') & ((status1 & S1RECORD) == S1RECORD) ) {
+	    } else if ( (Data == 'E') && ((status1 & S1RECORD) == S1RECORD) ) {
 	    	status1 |= S1DATA;
+	    	status1 &= ~S1RECORD;
 	    }
 
 	    if ((status1 & S1RECORD) == S1RECORD)
