@@ -87,4 +87,11 @@
 #define OUTPUT_PIN8 4
 #define OUTPUT_PIN9 5
 
+#define PHERIPHERAL_AMOUNT 21
+
+typedef struct {
+	int id;
+	int state;
+} pheripheral_typedef;
+
 #endif /* PLATFORM_CONFIG_H_ */

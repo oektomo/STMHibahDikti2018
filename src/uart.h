@@ -21,5 +21,7 @@ void USARTRpiNVIC_Configuration(void);
 void sendDataInt(int n);
 void sendDataRx();
 
+void testData();
+
 
 #endif /* UART_H_ */

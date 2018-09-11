@@ -72,6 +72,17 @@ timer_tick (void)
     }
 }
 
+volatile timer_ticks_t timer1sVal=TIMER_FREQUENCY_HZ;
+void timer1s (void)
+{
+	if(timer1sVal == 0) {
+		timer1sVal = TIMER_FREQUENCY_HZ;
+		//testData();
+	} else {
+		timer1sVal--;
+	}
+
+}
 // ----- SysTick_Handler() ----------------------------------------------------
 
 void
@@ -81,6 +92,7 @@ SysTick_Handler (void)
   HAL_IncTick();
 #endif
   timer_tick ();
+  timer1s ();
 }
 
 // ----------------------------------------------------------------------------

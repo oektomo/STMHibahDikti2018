@@ -173,14 +173,7 @@ void USART1_IRQHandler(void)
 
 	    //USART_SendData(USARTrPi, fifo_used(rxDatarPi));
 	    sendDataInt(fifo_used(rxDatarPi));
-	    //sendDataInt(status1);
-	    /*
-		  if( (status1 & S1DATA) == S1DATA) {
-			  sendDataRx();
-			  status1 &= ~S1DATA;
-			  USART_Tx(USARTrPi, '\n');
-		  }
-		  */
+
 	  }
 
 }
@@ -229,4 +222,8 @@ void sendDataRx()
 	}
 }
 
+void testData()
+{
+	USART_Tx(USARTrPi, 'A');
+}
 

@@ -95,7 +95,7 @@ main(int argc, char* argv[])
   // at high speed.
   trace_printf("System clock: %u Hz\n", SystemCoreClock);
 
-  timer_start();
+  timer_start(); // configuring timer using systick
 
   uint32_t seconds = 0;
 
@@ -103,13 +103,39 @@ main(int argc, char* argv[])
   initUART(&USART_InitStructure);
   USART_SendString(USARTrPi, "SmartHome Started v0.2 \n\r");
   rxDatarPi = fifo_create(LENGTHRpiRx);
+  pheripheral_typedef Pheripheral[PHERIPHERAL_AMOUNT];
+  if (SysTick_Config(SystemCoreClock / 1000))
+  {
+    /* Capture error */
+    while (1);
+  }
 
   // Infinite loop
   while (1)
     {
 //	  USART_Tx(USARTrPi, Data);
 	  if( (status1 & S1DATA) == S1DATA) {
-		  sendDataRx();
+
+			char idNumChar[4], idStateChar[4];
+			short temp;
+			fifo_read(rxDatarPi, &temp, 1); // ditch "S" header
+			fifo_read(rxDatarPi, idNumChar, 3); // copy value id consist 3 char
+			idNumChar[3] = '\0';
+			int idNumInt = atoi(idNumChar);
+
+			fifo_read(rxDatarPi, &temp, 1);	// ditch "&" separator
+			fifo_read(rxDatarPi, idStateChar, 3); // copy state consist 3 char
+			idStateChar[3] = '\0';
+			int idStateInt = atoi(idStateChar);
+			fifo_read(rxDatarPi, &temp, 1);	// ditch "E" tail
+
+			if( (idNumInt > 0) && (idNumInt <= PHERIPHERAL_AMOUNT) ) {
+				Pheripheral[idNumInt].id = idNumInt;
+				Pheripheral[idNumInt].state = idStateInt;
+			}
+			//retVal = idNumInt;
+
+		  // reset status data available
 		  status1 &= ~S1DATA;
 	  }
 
@@ -117,6 +143,10 @@ main(int argc, char* argv[])
   // Infinite loop, never return.
 }
 
+
 #pragma GCC diagnostic pop
+
+// read if received data already hit one frame
+// package example Sxxx&xxxE
 
 // ----------------------------------------------------------------------------
