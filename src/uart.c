@@ -175,6 +175,9 @@ void USART1_IRQHandler(void)
 	    	}
 
 	    	status1 &= ~S1RECORD;
+	    } else if ( Data == 'R') {
+	    	// to READ the status of pheripheral, just sent "R" via USART
+	    	status1 |= READ_PHERIPHERAL;
 	    }
 
 	    if ((status1 & S1RECORD) == S1RECORD)

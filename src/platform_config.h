@@ -13,6 +13,7 @@
 #define S1RECORD 1
 #define S1DATA 2
 #define TIMER_SYSTICK 4
+#define READ_PHERIPHERAL 8
 
 #define INLINE_CODE
 //#define USE_TRACE

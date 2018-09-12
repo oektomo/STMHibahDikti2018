@@ -156,7 +156,11 @@ main(int argc, char* argv[])
 	  if( (status1 & TIMER_SYSTICK) == TIMER_SYSTICK) {
 		  status1 &= ~TIMER_SYSTICK;
 		  readInput(Pheripheral);
-		  //USART_Tx(USARTrPi, 'A');
+	  }
+
+	  if( (status1 & READ_PHERIPHERAL) == READ_PHERIPHERAL) {
+		  status1 &= ~READ_PHERIPHERAL;
+		  printPheripheral(Pheripheral);
 	  }
 
     }
