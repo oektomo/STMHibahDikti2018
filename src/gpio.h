@@ -12,5 +12,8 @@
 void outputInit();
 void inputInit();
 void periphInit(pheripheral_typedef* Pheripheral, int pheripheralAmount);
+void readInput(pheripheral_typedef* Pheripheral);
+void writeOutput(short PheriphID, short PheriphState);
+
 
 #endif /* GPIO_H_ */

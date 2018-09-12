@@ -90,12 +90,89 @@ void periphInit(pheripheral_typedef* Pheripheral, int pheripheralAmount)
 		Pheripheral[i].state = 0;
 	}
 }
-void readInput()
+
+void readInput(pheripheral_typedef* Pheripheral)
 {
 	// baca inputan
+	Pheripheral[10].state = GPIO_ReadInputDataBit(INPUT_PH1_PORT, BLINK_PIN_MASK(INPUT_PH1_PIN) );
+	Pheripheral[11].state = GPIO_ReadInputDataBit(INPUT_PH2_PORT, BLINK_PIN_MASK(INPUT_PH2_PIN) );
+	Pheripheral[12].state = GPIO_ReadInputDataBit(INPUT_PH3_PORT, BLINK_PIN_MASK(INPUT_PH3_PIN) );
+	Pheripheral[13].state = GPIO_ReadInputDataBit(INPUT_PH4_PORT, BLINK_PIN_MASK(INPUT_PH4_PIN) );
+	Pheripheral[14].state = GPIO_ReadInputDataBit(INPUT_PH5_PORT, BLINK_PIN_MASK(INPUT_PH5_PIN) );
+	Pheripheral[15].state = GPIO_ReadInputDataBit(INPUT_PH6_PORT, BLINK_PIN_MASK(INPUT_PH6_PIN) );
+	Pheripheral[16].state = GPIO_ReadInputDataBit(INPUT_PH7_PORT, BLINK_PIN_MASK(INPUT_PH7_PIN) );
+	Pheripheral[17].state = GPIO_ReadInputDataBit(INPUT_PH8_PORT, BLINK_PIN_MASK(INPUT_PH8_PIN) );
+	Pheripheral[18].state = GPIO_ReadInputDataBit(INPUT_PH9_PORT, BLINK_PIN_MASK(INPUT_PH9_PIN) );
+	Pheripheral[19].state = GPIO_ReadInputDataBit(INPUT_PH10_PORT, BLINK_PIN_MASK(INPUT_PH10_PIN) );
+	Pheripheral[20].state = GPIO_ReadInputDataBit(INPUT_PH11_PORT, BLINK_PIN_MASK(INPUT_PH11_PIN) );
+	Pheripheral[21].state = GPIO_ReadInputDataBit(INPUT_PH12_PORT, BLINK_PIN_MASK(INPUT_PH12_PIN) );
 }
 
-void writeOutput()
+void writeOutput(short PheriphID, short PheriphState)
 {
-	// kirim Outputan
+
+	if(PheriphState == 0) {
+	switch (PheriphID) {
+	case 1:
+		GPIO_ResetBits( OUTPUT_PORT1_3, BLINK_PIN_MASK(OUTPUT_PIN1) );
+		break;
+	case 2:
+		GPIO_ResetBits( OUTPUT_PORT1_3, BLINK_PIN_MASK(OUTPUT_PIN2) );
+		break;
+	case 3:
+		GPIO_ResetBits( OUTPUT_PORT1_3, BLINK_PIN_MASK(OUTPUT_PIN3) );
+		break;
+
+	case 4:
+		GPIO_ResetBits( OUTPUT_PORT4_6, BLINK_PIN_MASK(OUTPUT_PIN4) );
+		break;
+	case 5:
+		GPIO_ResetBits( OUTPUT_PORT4_6, BLINK_PIN_MASK(OUTPUT_PIN5) );
+		break;
+	case 6:
+		GPIO_ResetBits( OUTPUT_PORT4_6, BLINK_PIN_MASK(OUTPUT_PIN6) );
+		break;
+
+	case 7:
+		GPIO_ResetBits( OUTPUT_PORT7_9, BLINK_PIN_MASK(OUTPUT_PIN7) );
+		break;
+	case 8:
+		GPIO_ResetBits( OUTPUT_PORT7_9, BLINK_PIN_MASK(OUTPUT_PIN8) );
+		break;
+	case 9:
+		GPIO_ResetBits( OUTPUT_PORT7_9, BLINK_PIN_MASK(OUTPUT_PIN9) );
+	}
+	} else
+		if(PheriphState == 1) {
+		switch (PheriphID) {
+		case 1:
+			GPIO_SetBits( OUTPUT_PORT1_3, BLINK_PIN_MASK(OUTPUT_PIN1) );
+			break;
+		case 2:
+			GPIO_SetBits( OUTPUT_PORT1_3, BLINK_PIN_MASK(OUTPUT_PIN2) );
+			break;
+		case 3:
+			GPIO_SetBits( OUTPUT_PORT1_3, BLINK_PIN_MASK(OUTPUT_PIN3) );
+			break;
+
+		case 4:
+			GPIO_SetBits( OUTPUT_PORT4_6, BLINK_PIN_MASK(OUTPUT_PIN4) );
+			break;
+		case 5:
+			GPIO_SetBits( OUTPUT_PORT4_6, BLINK_PIN_MASK(OUTPUT_PIN5) );
+			break;
+		case 6:
+			GPIO_SetBits( OUTPUT_PORT4_6, BLINK_PIN_MASK(OUTPUT_PIN6) );
+			break;
+
+		case 7:
+			GPIO_SetBits( OUTPUT_PORT7_9, BLINK_PIN_MASK(OUTPUT_PIN7) );
+			break;
+		case 8:
+			GPIO_SetBits( OUTPUT_PORT7_9, BLINK_PIN_MASK(OUTPUT_PIN8) );
+			break;
+		case 9:
+			GPIO_SetBits( OUTPUT_PORT7_9, BLINK_PIN_MASK(OUTPUT_PIN9) );
+		}
+		}
 }

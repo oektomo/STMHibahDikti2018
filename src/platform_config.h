@@ -12,6 +12,7 @@
 
 #define S1RECORD 1
 #define S1DATA 2
+#define TIMER_SYSTICK 4
 
 #define INLINE_CODE
 //#define USE_TRACE
@@ -59,18 +60,18 @@
 #define INPUT_PH5_PORT	GPIOA
 #define INPUT_PH6_PIN	4
 #define INPUT_PH6_PORT	GPIOA
-#define INPUT_PH7_PIN	15
-#define INPUT_PH7_PORT	GPIOC
-#define INPUT_PH8_PIN	14
-#define INPUT_PH8_PORT	GPIOC
-#define INPUT_PH9_PIN	13
-#define INPUT_PH9_PORT	GPIOC
-#define INPUT_PH10_PIN	3
-#define INPUT_PH10_PORT	GPIOA
-#define INPUT_PH11_PIN	1
-#define INPUT_PH11_PORT	GPIOA
-#define INPUT_PH12_PIN	0
-#define INPUT_PH12_PORT	GPIOA
+#define INPUT_PH7_PIN	3
+#define INPUT_PH7_PORT	GPIOA
+#define INPUT_PH8_PIN	1
+#define INPUT_PH8_PORT	GPIOA
+#define INPUT_PH9_PIN	0
+#define INPUT_PH9_PORT	GPIOA
+#define INPUT_PH10_PIN	15
+#define INPUT_PH10_PORT	GPIOC
+#define INPUT_PH11_PIN	14
+#define INPUT_PH11_PORT	GPIOC
+#define INPUT_PH12_PIN	13
+#define INPUT_PH12_PORT	GPIOC
 
 #define OUTPUT_PORT1_3 GPIOB
 #define OUTPUT_PIN1 12
@@ -91,7 +92,7 @@
 
 typedef struct {
 	int id;
-	int state;
+	uint8_t state;
 } pheripheral_typedef;
 
 #endif /* PLATFORM_CONFIG_H_ */

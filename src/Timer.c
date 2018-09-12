@@ -27,6 +27,7 @@
 
 #include "Timer.h"
 #include "cortexm/ExceptionHandlers.h"
+#include "platform_config.h"
 
 // ----------------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ timer_tick (void)
 }
 
 volatile timer_ticks_t timer1sVal=TIMER_FREQUENCY_HZ;
+extern uint8_t status1;
 void timer1s (void)
 {
 	if(timer1sVal == 0) {
@@ -93,6 +95,7 @@ SysTick_Handler (void)
 #endif
   timer_tick ();
   timer1s ();
+  status1 |= TIMER_SYSTICK;
 }
 
 // ----------------------------------------------------------------------------

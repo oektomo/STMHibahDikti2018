@@ -156,16 +156,25 @@ void USART1_IRQHandler(void)
 	  if(USART_GetITStatus(USARTrPi, USART_IT_RXNE) != RESET)
 	  {
 	    /* Read one byte from the receive data register */
-	    //RxBuffer1[RxCounter1++] = USART_ReceiveData(USARTrPi);
 	    Data = USART_ReceiveData(USARTrPi);
 
 	    // check status to RECORD or to tell if the status ready.
 	    if (Data == 'S') {
 	    	status1 |= S1RECORD;
 	    } else if ( (Data == 'E') && ((status1 & S1RECORD) == S1RECORD) ) {
-	    	status1 |= S1DATA;
+
+	    	// check if the data is 9 if not, delete it.
+	    	if(fifo_used(rxDatarPi) == 8) {
+	    		status1 |= S1DATA;
+		    	fifo_write(rxDatarPi, &Data, 1);
+	    	} else {
+	    		while (fifo_used(rxDatarPi)) {
+	    			char temp;
+	    			fifo_read(rxDatarPi, &temp, 1);
+	    		}
+	    	}
+
 	    	status1 &= ~S1RECORD;
-	    	fifo_write(rxDatarPi, &Data, 1);
 	    }
 
 	    if ((status1 & S1RECORD) == S1RECORD)

@@ -103,6 +103,8 @@ main(int argc, char* argv[])
 
   USART_InitTypeDef USART_InitStructure;
   initUART(&USART_InitStructure);
+  outputInit();
+  inputInit();
   USART_SendString(USARTrPi, "SmartHome Started v0.2 \n\r");
   rxDatarPi = fifo_create(LENGTHRpiRx);
   pheripheral_typedef Pheripheral[PHERIPHERAL_AMOUNT];
@@ -119,41 +121,42 @@ main(int argc, char* argv[])
 //	  USART_Tx(USARTrPi, Data);
 	  if( (status1 & S1DATA) == S1DATA) {
 
-			char idNumChar[4], idStateChar[4], tempChar[10];
+			char idNumChar[4], idStateChar[4], tempChar[10], temp;
 			//short temp;
 
 			fifo_read(rxDatarPi, tempChar, 9);
-			/*
-			fifo_read(rxDatarPi, &temp, 1); // ditch "S" header
-			fifo_read(rxDatarPi, idNumChar, 3); // copy value id consist 3 char
-			*/
+			while(fifo_used(rxDatarPi)>0) {
+				fifo_read(rxDatarPi, temp, 1);
+			}
 			strncpy(idNumChar, &(tempChar[1]), 3);
 			idNumChar[3] = '\0';
 			int idNumInt = atoi(idNumChar);
 
-			/*
-			fifo_read(rxDatarPi, &temp, 1);	// ditch "&" separator
-			fifo_read(rxDatarPi, idStateChar, 3); // copy state consist 3 char
-			*/
 			strncpy(idStateChar, &(tempChar[5]), 3);
 			idStateChar[3] = '\0';
 			int idStateInt = atoi(idStateChar);
-			//fifo_read(rxDatarPi, &temp, 1);	// ditch "E" tail
 
-			//USART_SendString(USARTrPi, 'S');
 			USART_SendString(USARTrPi, idNumChar);
 			USART_SendString(USARTrPi, idStateChar);
 
+			/* write the command to memory and to output,
+			 * if not available return with status.
+			 */
 			if( (idNumInt > 0) && (idNumInt <= PHERIPHERAL_AMOUNT) ) {
 				Pheripheral[idNumInt].id = idNumInt;
 				Pheripheral[idNumInt].state = idStateInt;
+				writeOutput(idNumInt, idStateInt);
 			} else {
 				printPheripheral(Pheripheral);
 			}
-			//retVal = idNumInt;
-
 		  // reset status data available
 		  status1 &= ~S1DATA;
+	  }
+
+	  if( (status1 & TIMER_SYSTICK) == TIMER_SYSTICK) {
+		  status1 &= ~TIMER_SYSTICK;
+		  readInput(Pheripheral);
+		  //USART_Tx(USARTrPi, 'A');
 	  }
 
     }
