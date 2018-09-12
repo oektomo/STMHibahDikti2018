@@ -11,6 +11,7 @@
 #define OS_INTEGER_UART_PRINTF_TMP_ARRAY_SIZE 100
 
 #include "stm32f10x_usart.h"
+#include "platform_config.h"
 
 void initUART(USART_InitTypeDef* USART_InitStructure);
 void initUART_GPIO();
@@ -20,7 +21,7 @@ int uart_printf(const char* format, ...);
 void USARTRpiNVIC_Configuration(void);
 void sendDataInt(int n);
 void sendDataRx();
-
+void printPheripheral(pheripheral_typedef* Pheripheral);
 void testData();
 
 

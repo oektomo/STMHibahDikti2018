@@ -149,7 +149,7 @@ struct FIFO *rxDatarPi;
  */
 void USART1_IRQHandler(void)
 {
-	uint16_t Data;
+	char Data;
 	//Data = USART_ReceiveData(USARTrPi);
 	//USART_SendData(USARTrPi, Data);
 
@@ -197,11 +197,6 @@ void USARTRpiNVIC_Configuration(void)
   NVIC_Init(&NVIC_InitStructure);
 }
 
-void actuateOutput()
-{
-
-}
-
 void sendDataInt(int n)
 {
 	char buffer[10];
@@ -219,6 +214,19 @@ void sendDataRx()
 	while( Data != 'E') {
 		fifo_read(rxDatarPi, &Data, 1);
 		USART_Tx(USARTrPi, Data);
+	}
+}
+
+void printPheripheral(pheripheral_typedef* Pheripheral)
+{
+	for (int i = 1; i <= PHERIPHERAL_AMOUNT; i++){
+		USART_Tx(USARTrPi, 'S');
+		sendDataInt(Pheripheral[i].id);
+		USART_Tx(USARTrPi, '&');
+		sendDataInt(Pheripheral[i].state);
+		USART_Tx(USARTrPi, 'E');
+		USART_Tx(USARTrPi, '\n');
+		USART_Tx(USARTrPi, '\r');
 	}
 }
 

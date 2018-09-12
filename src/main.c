@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "diag/Trace.h"
 
 #include "Timer.h"
@@ -36,6 +37,7 @@
 #include "uart.h"
 #include "platform_config.h"
 #include "codec2_fifo.h"
+#include "gpio.h"
 
 // ----------------------------------------------------------------------------
 //
@@ -104,6 +106,7 @@ main(int argc, char* argv[])
   USART_SendString(USARTrPi, "SmartHome Started v0.2 \n\r");
   rxDatarPi = fifo_create(LENGTHRpiRx);
   pheripheral_typedef Pheripheral[PHERIPHERAL_AMOUNT];
+  periphInit(Pheripheral, PHERIPHERAL_AMOUNT);
   if (SysTick_Config(SystemCoreClock / 1000))
   {
     /* Capture error */
@@ -116,22 +119,36 @@ main(int argc, char* argv[])
 //	  USART_Tx(USARTrPi, Data);
 	  if( (status1 & S1DATA) == S1DATA) {
 
-			char idNumChar[4], idStateChar[4];
-			short temp;
+			char idNumChar[4], idStateChar[4], tempChar[10];
+			//short temp;
+
+			fifo_read(rxDatarPi, tempChar, 9);
+			/*
 			fifo_read(rxDatarPi, &temp, 1); // ditch "S" header
 			fifo_read(rxDatarPi, idNumChar, 3); // copy value id consist 3 char
+			*/
+			strncpy(idNumChar, &(tempChar[1]), 3);
 			idNumChar[3] = '\0';
 			int idNumInt = atoi(idNumChar);
 
+			/*
 			fifo_read(rxDatarPi, &temp, 1);	// ditch "&" separator
 			fifo_read(rxDatarPi, idStateChar, 3); // copy state consist 3 char
+			*/
+			strncpy(idStateChar, &(tempChar[5]), 3);
 			idStateChar[3] = '\0';
 			int idStateInt = atoi(idStateChar);
-			fifo_read(rxDatarPi, &temp, 1);	// ditch "E" tail
+			//fifo_read(rxDatarPi, &temp, 1);	// ditch "E" tail
+
+			//USART_SendString(USARTrPi, 'S');
+			USART_SendString(USARTrPi, idNumChar);
+			USART_SendString(USARTrPi, idStateChar);
 
 			if( (idNumInt > 0) && (idNumInt <= PHERIPHERAL_AMOUNT) ) {
 				Pheripheral[idNumInt].id = idNumInt;
 				Pheripheral[idNumInt].state = idStateInt;
+			} else {
+				printPheripheral(Pheripheral);
 			}
 			//retVal = idNumInt;
 

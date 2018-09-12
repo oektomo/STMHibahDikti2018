@@ -82,3 +82,20 @@ void inputInit()
 	GPIO_InitStructure.GPIO_Pin = BLINK_PIN_MASK(INPUT_PH12_PIN);
 	GPIO_Init(INPUT_PH12_PORT, &GPIO_InitStructure);
 }
+
+void periphInit(pheripheral_typedef* Pheripheral, int pheripheralAmount)
+{
+	for(int i=1; i<=pheripheralAmount; i++) {
+		Pheripheral[i].id = i;
+		Pheripheral[i].state = 0;
+	}
+}
+void readInput()
+{
+	// baca inputan
+}
+
+void writeOutput()
+{
+	// kirim Outputan
+}

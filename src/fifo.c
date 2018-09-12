@@ -35,7 +35,7 @@
 #include "codec2_fifo.h"
 
 struct FIFO {
-    short *buf;
+    char *buf;
     short *pin;
     short *pout;
     int    nshort;
@@ -47,7 +47,7 @@ struct FIFO *fifo_create(int nshort) {
     fifo = (struct FIFO *)malloc(sizeof(struct FIFO));
     assert(fifo != NULL);
 
-    fifo->buf = (short*)malloc(sizeof(short)*nshort);
+    fifo->buf = (char*)malloc(sizeof(char)*nshort);
     assert(fifo->buf != NULL);
     fifo->pin = fifo->buf;
     fifo->pout = fifo->buf;
@@ -62,10 +62,10 @@ void fifo_destroy(struct FIFO *fifo) {
     free(fifo);
 }
 
-int fifo_write(struct FIFO *fifo, short data[], int n) {
+int fifo_write(struct FIFO *fifo, char data[], int n) {
     int            i;
-    short         *pdata;
-    short         *pin = fifo->pin;
+    char         *pdata;
+    char         *pin = fifo->pin;
 
     assert(fifo != NULL);
     assert(data != NULL);
@@ -90,11 +90,11 @@ int fifo_write(struct FIFO *fifo, short data[], int n) {
     return 0;
 }
 
-int fifo_read(struct FIFO *fifo, short data[], int n)
+int fifo_read(struct FIFO *fifo, char data[], int n)
 {
     int            i;
-    short         *pdata;
-    short         *pout = fifo->pout;
+    char         *pdata;
+    char         *pout = fifo->pout;
 
     assert(fifo != NULL);
     assert(data != NULL);
@@ -121,8 +121,8 @@ int fifo_read(struct FIFO *fifo, short data[], int n)
 
 int fifo_used(const struct FIFO * const fifo)
 {
-    short         *pin = fifo->pin;
-    short         *pout = fifo->pout;
+    char         *pin = fifo->pin;
+    char         *pout = fifo->pout;
     unsigned int   used;
 
     assert(fifo != NULL);
